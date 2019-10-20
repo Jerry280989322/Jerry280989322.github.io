@@ -1,0 +1,32 @@
+1. 
+Achaos@admin:~/Pytorch-UNet$ python3 train.py -e 5 -b 5 -l 0.01  -s 1
+0.9842 --- loss: -1082.491211
+0.9895 --- loss: -905.572327
+0.9947 --- loss: -945.792908
+Epoch finished ! Loss: -938.5600002430103
+Traceback (most recent call last):
+  File "train.py", line 139, in <module>
+    img_scale=args.scale)
+  File "train.py", line 92, in train_net
+    val_dice = eval_net(net, val, gpu)
+  File "/home/Achaos/Pytorch-UNet/eval.py", line 25, in eval_net
+    tot += dice_coeff(mask_pred, true_mask).item()
+  File "/home/Achaos/Pytorch-UNet/dice_loss.py", line 39, in dice_coeff
+    s = s + DiceCoeff().forward(c[0], c[1])
+  File "/home/Achaos/Pytorch-UNet/dice_loss.py", line 10, in forward
+    self.inter = torch.dot(input.view(-1), target.view(-1))
+RuntimeError: view size is not compatible with input tensor's size and stride (at least one dimension spans across two contiguous subspaces). Use .reshape(...) instead.
+
+solution: for training with cpu, change view() --> reshape(), but not have to when training with NVIDA GPU. As illustrated in ''https://github.com/agrimgupta92/sgan/issues/22 : The issue arises 
+from permuting mini-batch in seq_collate(data) of the data loader without calling contiguous() afterwards; tensor.permute breaks contiguity of a tensor and calling view on it raises an error. Training 
+and testing on GPU are not subjected to this issue because tensor.cuda() automatically makes the tensor contiguous. Using reshape() instead of view() may fix this problem as well. These can be seen from below:......''
+
+
+2. Loss does not between 0~1
+......
+0.9842 --- loss: -1082.491211
+0.9895 --- loss: -905.572327
+0.9947 --- loss: -945.792908
+Epoch finished ! Loss: -938.5600002430103
+
+3. Training with NVDIA GPU
