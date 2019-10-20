@@ -33,7 +33,7 @@ solution:
 
 
 4. Training with NVDIA GPU :'Runtime erro: out of memory......'
-solution: change the batch size: 5 --> 1 , refer to https://github.com/milesial/Pytorch-UNet/issues/61
+solution: change the batch size: 5 --> less than 5  , refer to https://github.com/milesial/Pytorch-UNet/issues/61
 
 
 
